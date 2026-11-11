@@ -125,7 +125,20 @@ addCardForm.addEventListener("submit", (event) => {
     }
     state.cards.push(card);
     displayCards(state.cards);
+    
+    // Fermer la modale
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
 
+    // Vider le formulaire
+    addCardForm.reset();
+
+    // Afficher un message de succès
+    Swal.fire({
+        icon: "success",
+        title: "Tâche ajoutée !",
+        text: "Votre tâche a été ajoutée avec succès."
+    });
 });
 function validateCard(card) {
     if (!card.title || !card.description || !card.assignee || !card.dueDate) {
