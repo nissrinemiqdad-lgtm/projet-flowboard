@@ -6,23 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>FlowBoard | Task Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="flowboard-1.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body>
-    <header>
+    <header class="container-fluid p-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1>FlowBoard</h1>
+                <h1 class="fw-bold mb-1">FlowBoard</h1>
                 <p>Organisez vos tâches, avancez sereinement.</p>
             </div>
 
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" id="add-card-btn">
                 + Ajouter une tâche
             </button>
         </div>
     </header>
+    <div id="loading" class="text-center p-3">Chargement des cartes...</div>
+    <div id="error" class="alert alert-danger d-none d-flex justify-content-between align-items-center">
+        <p id="error-message"></p>
+        <button id="retry-btn" class="btn btn-danger" type="button">
+            Réessayer
+        </button>
+    </div>
+
     <section class="container-fluid p-4">
         <div class="row g-3 align-items-center">
             <div class="col-md-4">
@@ -43,36 +52,19 @@
             </div>
         </div>
     </section>
+
     <main class="container-fluid p-3">
         <div class="row g-3">
             <!-- Colonne À faire -->
             <div class="col-md-4">
-                <section class="kanban-column">
+                <section class="kanban-column bg-white p-3 mt-3 rounded-3 border border-2">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="mb-0">À faire</h2>
+                        <h2 class="fs-5 fw-bold mb-0">À faire</h2>
                         <span id="todo-count">0</span>
                     </div>
 
                     <div id="todo-list">
-                        <!-- Carte de test -->
-                        <div class="card task-card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">Créer la page d'accueil</h5>
-                                <p class="card-text">
-                                    Préparer la structure HTML du projet.
-                                </p>
-                                <p class="card-text">
-                                    Responsable : Nissrine
-                                </p>
-                                <p class="card-text">
-                                    Date limite : 12/11/2026
-                                </p>
-                                <span class="badge bg-danger">Haute</span>
-
-                            </div>
-                        </div>
-
                     </div>
 
                 </section>
@@ -80,9 +72,9 @@
 
             <!-- Colonne En cours -->
             <div class="col-md-4">
-                <section class="kanban-column">
+                <section class="kanban-column bg-white p-3 mt-3 rounded-3 border border-2">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="mb-0">En cours</h2>
+                        <h2 class="fs-5 fw-bold mb-0">En cours</h2>
                         <span id="inprogress-count">0</span>
                     </div>
                     <div id="inprogress-list">
@@ -93,9 +85,9 @@
 
             <!-- Colonne Terminé -->
             <div class="col-md-4">
-                <section class="kanban-column">
+                <section class="kanban-column bg-white p-3 mt-3 rounded-3 border border-2">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="mb-0">Terminé</h2>
+                        <h2 class="fs-5 fw-bold mb-0">Terminé</h2>
                         <span id="done-count">0</span>
                     </div>
                     <div id="done-list">
@@ -107,8 +99,9 @@
         </div>
     </main>
 
-
-    <script type="module" src="API.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="UI.js"></script>
 </body>
 

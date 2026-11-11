@@ -1,25 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px;
-}
 
 header h1 {
     color: #7eefc5;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-header p {
-    color: #777777;
-    font-size: 14px;
 }
 
 header .btn {
@@ -32,17 +13,10 @@ header .btn:hover {
     border-color: #106344;
 }
 .kanban-column {
-    background-color: #ffffff;
-    padding: 15px;
-    margin-top: 15px;
-    border-radius: 8px;
-    border: solid #078b5a 2px;
+    border: solid #078b5a 2px ;
 }
 
 .kanban-column h2 {
-    font-size: 19px;
-    font-weight: bold;
-    margin-bottom: 15px;
     color: #342029;
 }
 #todo-count,
@@ -58,14 +32,10 @@ header .btn:hover {
 .task-card {
     background-color: #ffffff;
     border: 1px solid #dddddd;
-    border-radius: 8px;
-    padding: 5px;
 }
 
 .task-card h5 {
     color: #342029;
-    font-size: 17px;
-    font-weight: bold;
 }
 
 .task-card p {
