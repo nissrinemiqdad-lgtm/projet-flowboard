@@ -92,3 +92,12 @@ const retryBtn = document.querySelector("#retry-btn");
 retryBtn.addEventListener("click", loadCards);
 loadCards();
 
+const addCardBtn = document.querySelector("#add-card-btn");
+const modalElement = document.querySelector("#addCardModal");
+const addCardForm = document.querySelector("#add-card-form");
+
+
+addCardBtn.addEventListener("click", () => {
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+});
