@@ -92,10 +92,10 @@ const retryBtn = document.querySelector("#retry-btn");
 retryBtn.addEventListener("click", loadCards);
 loadCards();
 
+// AJOUTE DU CARD
 const addCardBtn = document.querySelector("#add-card-btn");
 const modalElement = document.querySelector("#addCardModal");
 const addCardForm = document.querySelector("#add-card-form");
-
 const cardTitle = document.querySelector("#card-title");
 const cardDescription = document.querySelector("#card-description");
 const cardPriority = document.querySelector("#card-priority");
