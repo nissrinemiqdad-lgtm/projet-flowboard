@@ -96,8 +96,41 @@ const addCardBtn = document.querySelector("#add-card-btn");
 const modalElement = document.querySelector("#addCardModal");
 const addCardForm = document.querySelector("#add-card-form");
 
+const cardTitle = document.querySelector("#card-title");
+const cardDescription = document.querySelector("#card-description");
+const cardPriority = document.querySelector("#card-priority");
+const cardAssignee = document.querySelector("#card-assignee");
+const cardDate = document.querySelector("#card-date");
+const cardStatus = document.querySelector("#card-status");
 
 addCardBtn.addEventListener("click", () => {
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
 });
+addCardForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const card = {
+        id: Date.now(),
+        title: cardTitle.value.trim(),
+        description: cardDescription.value.trim(),
+        priority: cardPriority.value,
+        assignee: cardAssignee.value.trim(),
+        dueDate: cardDate.value,
+        status: cardStatus.value,
+        tags: []
+    };
+    if (!validateCard(card)) {
+        console.log("Veuillez remplir tous les champs !");
+        return;
+    }
+    state.cards.push(card);
+    displayCards(state.cards);
+
+});
+function validateCard(card) {
+    if (!card.title || !card.description || !card.assignee || !card.dueDate) {
+        return false;
+    }
+
+    return true;
+}
