@@ -25,8 +25,66 @@
             </button>
         </div>
     </header>
-    <div class="modal fade" id="addCardModal" tabindex="-1" aria-hidden="true"></div>
-    
+    <div class="modal fade" id="addCardModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter une nouvelle tâche</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="add-card-form">
+
+                        <div class="mb-3">
+                            <label for="card-title" class="form-label">Titre</label>
+                            <input type="text" id="card-title" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="card-description" class="form-label">Description</label>
+                            <textarea id="card-description" class="form-control" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="card-priority" class="form-label">Priorité</label>
+                            <select id="card-priority" class="form-select">
+                                <option value="high">Haute</option>
+                                <option value="medium">Moyenne</option>
+                                <option value="low">Basse</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="card-assignee" class="form-label">Assigné à</label>
+                            <input type="text" id="card-assignee" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="card-date" class="form-label">Date limite</label>
+                            <input type="date" id="card-date" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="card-status" class="form-label">Statut</label>
+                            <select id="card-status" class="form-select">
+                                <option value="todo">À faire</option>
+                                <option value="in-progress">En cours</option>
+                                <option value="done">Terminé</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Ajouter
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div id="loading" class="text-center p-3">Chargement des cartes...</div>
     <div id="error" class="alert alert-danger d-none d-flex justify-content-between align-items-center">
         <p id="error-message"></p>
