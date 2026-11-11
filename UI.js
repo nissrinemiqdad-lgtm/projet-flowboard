@@ -64,3 +64,31 @@ function displayCards(donnees) {
     doneCount.textContent = done.children.length;
 
 }
+function loadCards() {
+    state.loading = true;
+    state.error = null;
+    displayState();
+    getCards()
+        .then((donnees) => {
+            state.cards = donnees;
+            state.loading = false;
+            state.error = null;
+            displayState();
+            displayCards(state.cards);
+        })
+        .catch((error) => {
+            state.loading = false;
+            state.error = "Impossible de charger les cartes.";
+            displayState();
+        });
+}
+function displayState() {
+    loadingElement.classList.toggle("d-none", !state.loading);
+    errorMessage.textContent = state.error || "";
+    errorElement.classList.toggle("d-none", !state.error);
+}
+
+const retryBtn = document.querySelector("#retry-btn");
+retryBtn.addEventListener("click", loadCards);
+loadCards();
+
