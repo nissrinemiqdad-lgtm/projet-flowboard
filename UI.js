@@ -71,12 +71,34 @@ function loadCards() {
     getCards()
         .then((donnees) => {
             state.cards = donnees;
-            
+            const responsables = [];
+
+            state.cards.forEach((carte) => {
+                if (!responsables.includes(carte.assignee)) {
+                    responsables.push(carte.assignee);
+                }
+            });
+            filtre_assignee.innerHTML = '<option value="">Tous les responsables</option>';
+            responsables.forEach((responsable) => {
+                // Créer une option
+                const option = document.createElement("option");
+                // Ajouter le nom
+                option.textContent = responsable;
+                option.value = responsable;
+                // Ajouter l'option au select
+                filtre_assignee.appendChild(option);
+            });
+
             state.loading = false;
             state.error = null;
             displayState();
             displayCards(state.cards);
         })
+        .catch((error) => {
+            state.loading = false;
+            state.error = "Impossible de charger les cartes.";
+            displayState();
+        });
 
 }
 
@@ -164,7 +186,11 @@ function Filters() {
     if (filtre_assignee.value !== "") {
         params.append("assignee", filtre_assignee.value)
     }
-
+    getCards(params)
+        .then((donnees) => {
+            state.cards = donnees;
+            displayCards(state.cards);
+        });
 }
 search.addEventListener("input", Filters);
 filtre_priority.addEventListener("change", Filters);
