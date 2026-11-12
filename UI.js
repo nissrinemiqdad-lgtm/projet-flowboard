@@ -71,17 +71,15 @@ function loadCards() {
     getCards()
         .then((donnees) => {
             state.cards = donnees;
+            
             state.loading = false;
             state.error = null;
             displayState();
             displayCards(state.cards);
         })
-        .catch((error) => {
-            state.loading = false;
-            state.error = "Impossible de charger les cartes.";
-            displayState();
-        });
+
 }
+
 function displayState() {
     loadingElement.classList.toggle("d-none", !state.loading);
     errorMessage.textContent = state.error || "";
@@ -125,7 +123,7 @@ addCardForm.addEventListener("submit", (event) => {
     }
     state.cards.push(card);
     displayCards(state.cards);
-    
+
     // Fermer la modale
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal.hide();
@@ -147,3 +145,4 @@ function validateCard(card) {
 
     return true;
 }
+
