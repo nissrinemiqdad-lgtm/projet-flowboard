@@ -146,3 +146,26 @@ function validateCard(card) {
     return true;
 }
 
+// PARTIE FILTRE
+const search = document.querySelector("#search-task");
+const filtre_priority = document.querySelector("#filter-priority");
+const filtre_assignee = document.querySelector("#filter-assignee")
+
+function Filters() {
+    const params = new URLSearchParams();
+    if (search.value !== "") {
+        params.append("q", search.value);
+    }
+
+
+    if (filtre_priority.value !== "") {
+        params.append("priority", filtre_priority.value);
+    }
+    if (filtre_assignee.value !== "") {
+        params.append("assignee", filtre_assignee.value)
+    }
+
+}
+search.addEventListener("input", Filters);
+filtre_priority.addEventListener("change", Filters);
+filtre_assignee.addEventListener("change", Filters);
