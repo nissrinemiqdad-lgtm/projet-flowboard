@@ -29,7 +29,7 @@ function displayCards(donnees) {
         }
         else if (carte.priority === "medium") {
             priorite = "Moyenne";
-            couleur = "bg-warning text-dark"
+            couleur = "bg-warning "
         }
         else if (carte.priority === "low") {
             priorite = "Basse";
