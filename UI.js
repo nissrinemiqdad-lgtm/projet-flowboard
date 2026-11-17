@@ -1,9 +1,3 @@
-import { getCards } from "./API.js";
-const state = {
-    cards: [],
-    loading: true,
-    error: null
-};
 
 const todo = document.querySelector("#todo-list")
 const progress = document.querySelector("#inprogress-list")
@@ -15,7 +9,7 @@ const loadingElement = document.querySelector("#loading");
 const errorElement = document.querySelector("#error");
 const errorMessage = document.querySelector("#error-message");
 
-function displayCards(donnees) {
+export function displayCards(donnees) {
     todo.innerHTML = "";
     progress.innerHTML = "";
     done.innerHTML = "";
@@ -64,58 +58,28 @@ function displayCards(donnees) {
     doneCount.textContent = done.children.length;
 
 }
-function loadCards() {
-    state.loading = true;
-    state.error = null;
-    displayState();
-    getCards()
-        .then((donnees) => {
-            state.cards = donnees;
-            const responsables = [];
 
-            state.cards.forEach((carte) => {
-                if (!responsables.includes(carte.assignee)) {
-                    responsables.push(carte.assignee);
-                }
-            });
-            filtre_assignee.innerHTML = '<option value="">Tous les responsables</option>';
-            responsables.forEach((responsable) => {
-                // Créer une option
-                const option = document.createElement("option");
-                // Ajouter le nom
-                option.textContent = responsable;
-                option.value = responsable;
-                // Ajouter l'option au select
-                filtre_assignee.appendChild(option);
-            });
-
-            state.loading = false;
-            state.error = null;
-            displayState();
-            displayCards(state.cards);
-        })
-        .catch((error) => {
-            state.loading = false;
-            state.error = "Impossible de charger les cartes.";
-            displayState();
-        });
-
-}
-
-function displayState() {
+export function displayState(state) {
     loadingElement.classList.toggle("d-none", !state.loading);
     errorMessage.textContent = state.error || "";
     errorElement.classList.toggle("d-none", !state.error);
 }
+const filtre_assignee = document.querySelector("#filter-assignee");
 
-const retryBtn = document.querySelector("#retry-btn");
-retryBtn.addEventListener("click", loadCards);
-loadCards();
+export function displayAssignees(responsables) {
+    filtre_assignee.innerHTML = '<option value="">Tous les responsables</option>';
+
+    responsables.forEach((responsable) => {
+        const option = document.createElement("option");
+        option.textContent = responsable;
+        option.value = responsable;
+        filtre_assignee.appendChild(option);
+    });
+}
+
 
 // AJOUTE DU CARD
-const addCardBtn = document.querySelector("#add-card-btn");
 const modalElement = document.querySelector("#addCardModal");
-const addCardForm = document.querySelector("#add-card-form");
 const cardTitle = document.querySelector("#card-title");
 const cardDescription = document.querySelector("#card-description");
 const cardPriority = document.querySelector("#card-priority");
@@ -123,14 +87,20 @@ const cardAssignee = document.querySelector("#card-assignee");
 const cardDate = document.querySelector("#card-date");
 const cardStatus = document.querySelector("#card-status");
 
-addCardBtn.addEventListener("click", () => {
+
+export function openCardModal() {
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
-});
-addCardForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+}
+
+export function closeCardModal() {
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    modal.hide();
+}
+
+
+export function readCardForm() {
     const card = {
-        id: Date.now(),
         title: cardTitle.value.trim(),
         description: cardDescription.value.trim(),
         priority: cardPriority.value,
@@ -139,28 +109,11 @@ addCardForm.addEventListener("submit", (event) => {
         status: cardStatus.value,
         tags: []
     };
-    if (!validateCard(card)) {
-        console.log("Veuillez remplir tous les champs !");
-        return;
-    }
-    state.cards.push(card);
-    displayCards(state.cards);
 
-    // Fermer la modale
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal.hide();
+    return card;
+}
 
-    // Vider le formulaire
-    addCardForm.reset();
-
-    // Afficher un message de succès
-    Swal.fire({
-        icon: "success",
-        title: "Tâche ajoutée !",
-        text: "Votre tâche a été ajoutée avec succès."
-    });
-});
-function validateCard(card) {
+export function validateCard(card) {
     if (!card.title || !card.description || !card.assignee || !card.dueDate) {
         return false;
     }
@@ -168,30 +121,3 @@ function validateCard(card) {
     return true;
 }
 
-// PARTIE FILTRE
-const search = document.querySelector("#search-task");
-const filtre_priority = document.querySelector("#filter-priority");
-const filtre_assignee = document.querySelector("#filter-assignee")
-
-function Filters() {
-    const params = new URLSearchParams();
-    if (search.value !== "") {
-        params.append("q", search.value);
-    }
-
-
-    if (filtre_priority.value !== "") {
-        params.append("priority", filtre_priority.value);
-    }
-    if (filtre_assignee.value !== "") {
-        params.append("assignee", filtre_assignee.value)
-    }
-    getCards(params)
-        .then((donnees) => {
-            state.cards = donnees;
-            displayCards(state.cards);
-        });
-}
-search.addEventListener("input", Filters);
-filtre_priority.addEventListener("change", Filters);
-filtre_assignee.addEventListener("change", Filters);
