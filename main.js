@@ -6,6 +6,8 @@ import {
     readCardForm,
     displayAssignees,
     closeCardModal,
+    fillCardForm,
+    changeModalTitle,
 } from "./UI.js";
 import { getCards } from "./API.js";
 
@@ -16,6 +18,7 @@ const state = {
     error: null
 };
 
+let cardToEdit = null;
 
 const search = document.querySelector("#search-task");
 const filtre_priority = document.querySelector("#filter-priority");
@@ -24,10 +27,12 @@ const addCardBtn = document.querySelector("#add-card-btn");
 const retryBtn = document.querySelector("#retry-btn");
 const addCardForm = document.querySelector("#add-card-form");
 
+//  charger les carte au demarage : 
+
 function loadCards() {
-    state.loading = true;
-    state.error = null;
-    displayState(state);
+
+    // recuperation des cards depuis API : 
+
     getCards()
         .then((donnees) => {
             state.cards = donnees;
@@ -54,6 +59,7 @@ function loadCards() {
 
 }
 
+// filtrers les resultats :
 
 function Filters() {
     const params = new URLSearchParams();
@@ -75,16 +81,15 @@ function Filters() {
             state.cards = donnees;
             displayCards(state.cards);
         })
-        .catch((error) => {
-            state.error = "Impossible de filtrer les cartes.";
-            displayState(state);
-        });
 }
 
+addCardBtn.addEventListener("click", () => {
+    cardToEdit = null;
+    changeModalTitle("Ajouter une nouvelle tâche");
+    openCardModal();
+});
 
-
-addCardBtn.addEventListener("click", openCardModal);
-
+// addCardBtn.addEventListener("click", openCardModal);
 retryBtn.addEventListener("click", loadCards);
 
 search.addEventListener("input", Filters);
@@ -111,10 +116,41 @@ addCardForm.addEventListener("submit", (event) => {
         return;
     }
 
-    state.cards.push(card)
+    // state.cards.push(card)
+
+    if (cardToEdit) {
+        Object.assign(cardToEdit, card);
+        cardToEdit = null;
+    } else {
+        state.cards.push(card);
+
+    }
+
     closeCardModal();
     addCardForm.reset();
     displayCards(state.cards);
 
+});
+
+// Modification :
+
+document.addEventListener("click", (event) => {
+
+    if (event.target.className.includes("btn-modifier")) {
+
+        const id = event.target.dataset.id;
+
+        const carte = state.cards.find((carte) => {
+            return String(carte.id) === id;
+        });
+        
+        cardToEdit = carte;
+        fillCardForm(cardToEdit);
+        changeModalTitle("Modifier une tâche");
+        openCardModal();
+
+        console.log(cardToEdit);
+    }
 
 });
+
