@@ -9,7 +9,7 @@ import {
     fillCardForm,
     changeModalTitle,
 } from "./UI.js";
-import { getCards, updateCard, Movecard} from "./API.js";
+import { getCards, updateCard, Movecard } from "./API.js";
 
 
 const state = {
@@ -95,7 +95,6 @@ retryBtn.addEventListener("click", loadCards);
 search.addEventListener("input", Filters);
 filtre_priority.addEventListener("change", Filters);
 filtre_assignee.addEventListener("change", Filters);
-
 loadCards();
 
 
@@ -103,8 +102,6 @@ const creerCardBtn = document.querySelector("#terminé");
 
 addCardForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    console.log("Le formulaire est envoyé !");
 
     const card = readCardForm();
 
@@ -193,9 +190,21 @@ document.addEventListener("click", async (event) => {
             }
         }
 
-        carte.status = nouveauStatut;
+        try {
+            await Movecard(id, nouveauStatut);
+            loadCards();
 
-        displayCards(state.cards);
+        } catch (error) {
+
+            console.log("Erreur PATCH :", error);
+            console.log("Réponse API :", error.response?.data);
+
+            Swal.fire({
+                icon: "error",
+                title: "Erreur",
+                text: "Impossible de déplacer cette carte !"
+            });
+        }
 
         console.log("Nouveau statut :", nouveauStatut);
         console.log("ID de la carte :", id);
