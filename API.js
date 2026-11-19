@@ -18,23 +18,10 @@ export async function getCards(params = {}) {
 
 }
 
-// .then((res) => {
-//         if (!res.ok) {
-//             throw new Error("Erreur lors du chargement des cartes");
-//         }
-
-//         return res.json();
-//     })
-
-//         .then((donnees) => {
-//             return donnees;
-//         })
-
 export async function updateCard(id, card) {
     try {
         const response = await axios.put(
-            `https://flowboard-api-virid.vercel.app/cards/${id}`,
-            card,
+            `https://flowboard-api-virid.vercel.app/cards/${id}`, card,
             {
                 headers: {
                     'X-Workspace': 'public'
@@ -52,4 +39,6 @@ export async function updateCard(id, card) {
         throw error;
     }
 }
+
+
 

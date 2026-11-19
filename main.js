@@ -165,3 +165,41 @@ document.addEventListener("click", (event) => {
 });
 
 
+document.addEventListener("click", (event) => {
+    if (event.target.className.includes("btn-deplacer")) {
+
+        const id = event.target.dataset.id;
+        const direction = event.target.dataset.direction;
+        const carte = state.cards.find((carte) => {
+            return String(carte.id) === id;
+        });
+
+        let nouveauStatut = carte.status;
+
+        if (direction === "droite") {
+            if (carte.status === "todo") {
+                nouveauStatut = "in-progress";
+            }
+            else if (carte.status === "in-progress") {
+                nouveauStatut = "done";
+            }
+        }
+        else if (direction === "gauche") {
+            if (carte.status === "done") {
+                nouveauStatut = "in-progress";
+            }
+            else if (carte.status === "in-progress") {
+                nouveauStatut = "todo";
+            }
+        }
+
+        carte.status = nouveauStatut;
+
+        displayCards(state.cards);
+
+        console.log("Nouveau statut :", nouveauStatut);
+        console.log("ID de la carte :", id);
+        console.log("Direction :", direction);
+
+    }
+});
