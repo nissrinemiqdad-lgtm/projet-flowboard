@@ -40,6 +40,7 @@ export function displayCards(donnees) {
                 <p class="card-text"> Responsable : ${carte.assignee} </p>
                 <p class="card-text"> Date limite : ${carte.dueDate}</p>
                 <span class="badge ${couleur}">${priorite}</span>
+                
                 <button class="btn bg-secondary text-white  p-0.5  btn-modifier" data-id="${carte.id}" > Modifier </button>
             </div>
         </div>`;

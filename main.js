@@ -9,7 +9,7 @@ import {
     fillCardForm,
     changeModalTitle,
 } from "./UI.js";
-import { getCards } from "./API.js";
+import { getCards, updateCard } from "./API.js";
 
 
 const state = {
@@ -89,7 +89,7 @@ addCardBtn.addEventListener("click", () => {
     openCardModal();
 });
 
-// addCardBtn.addEventListener("click", openCardModal);
+
 retryBtn.addEventListener("click", loadCards);
 
 search.addEventListener("input", Filters);
@@ -100,7 +100,7 @@ loadCards();
 
 
 
-addCardForm.addEventListener("submit", (event) => {
+addCardForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     console.log("Le formulaire est envoyé !");
@@ -116,19 +116,17 @@ addCardForm.addEventListener("submit", (event) => {
         return;
     }
 
-    // state.cards.push(card)
-
     if (cardToEdit) {
-        Object.assign(cardToEdit, card);
+        await updateCard(cardToEdit.id, card);
         cardToEdit = null;
+        loadCards();
     } else {
         state.cards.push(card);
-
+        displayCards(state.cards);
     }
 
     closeCardModal();
     addCardForm.reset();
-    displayCards(state.cards);
 
 });
 
@@ -143,7 +141,7 @@ document.addEventListener("click", (event) => {
         const carte = state.cards.find((carte) => {
             return String(carte.id) === id;
         });
-        
+
         cardToEdit = carte;
         fillCardForm(cardToEdit);
         changeModalTitle("Modifier une tâche");
@@ -153,4 +151,6 @@ document.addEventListener("click", (event) => {
     }
 
 });
+
+const creerCardBtn = document.querySelector("#terminé");
 
