@@ -9,7 +9,7 @@ import {
     fillCardForm,
     changeModalTitle,
 } from "./UI.js";
-import { getCards, updateCard } from "./API.js";
+import { getCards, updateCard, Movecard} from "./API.js";
 
 
 const state = {
@@ -165,7 +165,7 @@ document.addEventListener("click", (event) => {
 });
 
 
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
     if (event.target.className.includes("btn-deplacer")) {
 
         const id = event.target.dataset.id;
