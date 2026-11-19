@@ -99,6 +99,7 @@ filtre_assignee.addEventListener("change", Filters);
 loadCards();
 
 
+const creerCardBtn = document.querySelector("#terminé");
 
 addCardForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -117,16 +118,27 @@ addCardForm.addEventListener("submit", async (event) => {
     }
 
     if (cardToEdit) {
-        await updateCard(cardToEdit.id, card);
-        cardToEdit = null;
-        loadCards();
-    } else {
+        creerCardBtn.disabled = true;
+
+        try {
+            await updateCard(cardToEdit.id, card);
+            cardToEdit = null;
+            loadCards();
+
+            closeCardModal();
+            addCardForm.reset();
+
+        } finally {
+            creerCardBtn.disabled = false;
+        }
+    }
+    else {
         state.cards.push(card);
         displayCards(state.cards);
-    }
 
-    closeCardModal();
-    addCardForm.reset();
+        closeCardModal();
+        addCardForm.reset();
+    }
 
 });
 
@@ -152,5 +164,4 @@ document.addEventListener("click", (event) => {
 
 });
 
-const creerCardBtn = document.querySelector("#terminé");
 
