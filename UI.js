@@ -166,6 +166,8 @@ const todoCount = document.querySelector("#todo-count");
 const progressCount = document.querySelector("#inprogress-count");
 const doneCount = document.querySelector("#done-count");
 
+// charger les données depuis API 
+
 function chargerCartes() {
     return fetch("https://flowboard-api-virid.vercel.app/cards")
         .then((res) => {
@@ -181,6 +183,8 @@ function chargerCartes() {
         });
 }
 chargerCartes()
+
+// la creation du card
 
 function creationcard(card, colonne) {
     const div = document.createElement("div");
@@ -228,4 +232,29 @@ function creationcard(card, colonne) {
     colonne.appendChild(div);
 }
 
+// affichage du card 
 
+function affichercards(cards) {
+
+    todo.innerHTML = "";
+    progress.innerHTML = "";
+    done.innerHTML = "";
+
+    const cardsTodo = cards.filter((card) => {
+        return card.status === "todo";
+    });
+    const cardsprogress = cards.filter((card) => {
+        return card.status === "in-progress"
+    });
+    const cardsdone = cards.filter((card) => {
+        return card.status === 'done'
+    });
+
+    cardsTodo.forEach((card) => creationcard(card, todo));
+    cardsprogress.forEach((card) => creationcard(card, progress));
+    cardsdone.forEach((card) => creationcard(card, done));
+
+    todoCount.textContent = cardsTodo.length;
+    progressCount.textContent = cardsprogress.length;
+    doneCount.textContent = cardsdone.length;
+}
