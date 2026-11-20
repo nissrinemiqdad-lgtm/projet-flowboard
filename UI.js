@@ -172,15 +172,24 @@ function chargerCartes() {
     return fetch("https://flowboard-api-virid.vercel.app/cards")
         .then((res) => {
            
-            return res.json();
+            if (!res.ok) {
+                throw new Error("Erreur lors du chargement des cartes");
+            }
+             return res.json();
+
         })
         .then((donnees) => {
             loading.style.display = "none";
-
-            console.log(donnees)
-            return donnees
-
+            console.log(donnees);
+            
+            affichercards(donnees);
+        })
+        .catch((erreur) => {
+            console.error(erreur);
+            loading.textContent = "Impossible de charger les cartes.";
         });
+
+        
 }
 chargerCartes()
 
