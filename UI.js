@@ -181,3 +181,51 @@ function chargerCartes() {
         });
 }
 chargerCartes()
+
+function creationcard(card, colonne) {
+    const div = document.createElement("div");
+    div.className = "card mb-3";
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    const titre = document.createElement("h5");
+    titre.textContent = card.title;
+
+    const description = document.createElement("p");
+    description.textContent = card.description;
+
+    // assignee
+    const assignee = document.createElement("p");
+    assignee.textContent = `Responsable : ${card.assignee}`;
+
+    // category
+    const category = document.createElement("p");
+    category.textContent = `Catégorie : ${card.tags}`;
+
+    // date
+    const date = document.createElement("p");
+    date.textContent = `Date limite : ${card.dueDate}`;
+
+    // priority 
+    const priority = document.createElement("span")
+
+    if (card.priority === "high") {
+        priority.textContent = "Haute";
+        priority.className = "badge bg-danger";
+    }
+    else if (card.priority === "medium") {
+        priority.textContent = "Moyenne";
+        priority.className = "badge bg-warning ";
+    }
+    else {
+        priority.textContent = "Basse";
+        priority.className = "badge bg-success";
+    }
+
+    body.append(titre, description, assignee, category, date, priority);
+    div.appendChild(body);
+    colonne.appendChild(div);
+}
+
+
