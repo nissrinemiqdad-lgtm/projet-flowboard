@@ -165,23 +165,31 @@ const done = document.querySelector("#done-list")
 const todoCount = document.querySelector("#todo-count");
 const progressCount = document.querySelector("#inprogress-count");
 const doneCount = document.querySelector("#done-count");
+const titleCard = document.querySelector("#card-title");
+const descriptionCard = document.querySelector("#card-description");
+const priorityCard = document.querySelector("#card-priority");
+const assigneeCard = document.querySelector("#card-assignee");
+const DateCard = document.querySelector("#card-date");
+const statusCard = document.querySelector("#card-status"); 
 
+let cards = [];
+let cardModifier = null ;
 // charger les données depuis API 
 
 function chargerCartes() {
     return fetch("https://flowboard-api-virid.vercel.app/cards")
         .then((res) => {
-           
+
             if (!res.ok) {
                 throw new Error("Erreur lors du chargement des cartes");
             }
-             return res.json();
+            return res.json();
 
         })
         .then((donnees) => {
             loading.style.display = "none";
             console.log(donnees);
-            
+            cards = donnees
             affichercards(donnees);
         })
         .catch((erreur) => {
@@ -189,7 +197,6 @@ function chargerCartes() {
             loading.textContent = "Impossible de charger les cartes.";
         });
 
-        
 }
 chargerCartes()
 
@@ -212,10 +219,6 @@ function creationcard(card, colonne) {
     const assignee = document.createElement("p");
     assignee.textContent = `Responsable : ${card.assignee}`;
 
-    // category
-    const category = document.createElement("p");
-    category.textContent = `Catégorie : ${card.tags}`;
-
     // date
     const date = document.createElement("p");
     date.textContent = `Date limite : ${card.dueDate}`;
@@ -236,7 +239,32 @@ function creationcard(card, colonne) {
         priority.className = "badge bg-success";
     }
 
-    body.append(titre, description, assignee, category, date, priority);
+    const modifier = document.createElement("button");
+
+    modifier.textContent = "Modifier";
+    modifier.className = "btn btn-secondary m-1 btn-modifier";
+    modifier.addEventListener("click", () => {
+        const id = Number(modifier.dataset.id);
+
+        const card = cards.find((element) => {
+            return element.id === id;
+        });
+        titleCard.value = card.title
+        descriptionCard.value = card.description
+        priorityCard.value = card.priority
+        assigneeCard.value = card.assignee
+        DateCard.value = card.date
+        statusCard.value = card.status
+
+        console.log(card);
+        cardModifier = card.id
+        console.log(cardModifier);
+        
+        
+    });
+    modifier.dataset.id = card.id;
+
+    body.append(titre, description, assignee, date, priority, modifier);
     div.appendChild(body);
     colonne.appendChild(div);
 }
