@@ -170,10 +170,13 @@ const descriptionCard = document.querySelector("#card-description");
 const priorityCard = document.querySelector("#card-priority");
 const assigneeCard = document.querySelector("#card-assignee");
 const DateCard = document.querySelector("#card-date");
-const statusCard = document.querySelector("#card-status"); 
+const statusCard = document.querySelector("#card-status");
+const Modal = document.querySelector("#addCardModal");
+const buttonTerminée = document.querySelector("#terminé");
+const form = document.querySelector("#add-card-form");
 
 let cards = [];
-let cardModifier = null ;
+let cardModifier = null;
 // charger les données depuis API 
 
 function chargerCartes() {
@@ -243,7 +246,9 @@ function creationcard(card, colonne) {
 
     modifier.textContent = "Modifier";
     modifier.className = "btn btn-secondary m-1 btn-modifier";
+    modifier.dataset.id = card.id;
     modifier.addEventListener("click", () => {
+
         const id = Number(modifier.dataset.id);
 
         const card = cards.find((element) => {
@@ -253,16 +258,25 @@ function creationcard(card, colonne) {
         descriptionCard.value = card.description
         priorityCard.value = card.priority
         assigneeCard.value = card.assignee
-        DateCard.value = card.date
+        DateCard.value = card.dueDate
         statusCard.value = card.status
 
         console.log(card);
         cardModifier = card.id
         console.log(cardModifier);
-        
-        
+
+        const modal = new bootstrap.Modal(Modal);
+        modal.show();
+
+        buttonTerminée.addEventListener('click', () => {
+            const modal = bootstrap.Modal.getInstance(Modal)
+            modal.hide()
+
+        })
+
     });
-    modifier.dataset.id = card.id;
+
+
 
     body.append(titre, description, assignee, date, priority, modifier);
     div.appendChild(body);
@@ -295,3 +309,28 @@ function affichercards(cards) {
     progressCount.textContent = cardsprogress.length;
     doneCount.textContent = cardsdone.length;
 }
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const nouvelleCarte = {
+        title: titleCard.value,
+        description: descriptionCard.value,
+        priority: priorityCard.value,
+        assignee: assigneeCard.value,
+        dueDate: DateCard.value,
+        status: statusCard.value
+    };
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].id === cardModifier) {
+            cards[i].title = nouvelleCarte.title;
+            cards[i].description = nouvelleCarte.description;
+            cards[i].priority = nouvelleCarte.priority;
+            cards[i].assignee = nouvelleCarte.assignee;
+            cards[i].dueDate = nouvelleCarte.Date;
+            cards[i].status = nouvelleCarte.status;
+        }
+    }
+    affichercards(cards)
+
+    console.log(cardModifier);
+
+});
