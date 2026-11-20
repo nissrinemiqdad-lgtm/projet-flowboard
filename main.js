@@ -1,214 +1,214 @@
-import {
-    displayCards,
-    displayState,
-    validateCard,
-    openCardModal,
-    readCardForm,
-    displayAssignees,
-    closeCardModal,
-    fillCardForm,
-    changeModalTitle,
-} from "./UI.js";
-import { getCards, updateCard, Movecard } from "./API.js";
+// import {
+//     displayCards,
+//     displayState,
+//     validateCard,
+//     openCardModal,
+//     readCardForm,
+//     displayAssignees,
+//     closeCardModal,
+//     fillCardForm,
+//     changeModalTitle,
+// } from "./UI.js";
+// import { getCards, updateCard, Movecard } from "./API.js";
 
 
-const state = {
-    cards: [],
-    loading: true,
-    error: null
-};
+// const state = {
+//     cards: [],
+//     loading: true,
+//     error: null
+// };
 
-let cardToEdit = null;
+// let cardToEdit = null;
 
-const search = document.querySelector("#search-task");
-const filtre_priority = document.querySelector("#filter-priority");
-const filtre_assignee = document.querySelector("#filter-assignee");
-const addCardBtn = document.querySelector("#add-card-btn");
-const retryBtn = document.querySelector("#retry-btn");
-const addCardForm = document.querySelector("#add-card-form");
+// const search = document.querySelector("#search-task");
+// const filtre_priority = document.querySelector("#filter-priority");
+// const filtre_assignee = document.querySelector("#filter-assignee");
+// const addCardBtn = document.querySelector("#add-card-btn");
+// const retryBtn = document.querySelector("#retry-btn");
+// const addCardForm = document.querySelector("#add-card-form");
 
-//  charger les carte au demarage : 
+// //  charger les carte au demarage : 
 
-function loadCards() {
+// function loadCards() {
 
-    // recuperation des cards depuis API : 
+//     // recuperation des cards depuis API : 
 
-    getCards()
-        .then((donnees) => {
-            state.cards = donnees;
-            const responsables = [];
+//     getCards()
+//         .then((donnees) => {
+//             state.cards = donnees;
+//             const responsables = [];
 
-            state.cards.forEach((carte) => {
-                if (!responsables.includes(carte.assignee)) {
-                    responsables.push(carte.assignee);
-                }
-            });
+//             state.cards.forEach((carte) => {
+//                 if (!responsables.includes(carte.assignee)) {
+//                     responsables.push(carte.assignee);
+//                 }
+//             });
 
-            displayAssignees(responsables);
+//             displayAssignees(responsables);
 
-            state.loading = false;
-            state.error = null;
-            displayState(state);
-            displayCards(state.cards);
-        })
-        .catch((error) => {
-            state.loading = false;
-            state.error = "Impossible de charger les cartes.";
-            displayState(state);
-        });
+//             state.loading = false;
+//             state.error = null;
+//             displayState(state);
+//             displayCards(state.cards);
+//         })
+//         .catch((error) => {
+//             state.loading = false;
+//             state.error = "Impossible de charger les cartes.";
+//             displayState(state);
+//         });
 
-}
+// }
 
-// filtrers les resultats :
+// // filtrers les resultats :
 
-function Filters() {
-    const params = new URLSearchParams();
+// function Filters() {
+//     const params = new URLSearchParams();
 
-    if (search.value !== "") {
-        params.append("q", search.value);
-    }
+//     if (search.value !== "") {
+//         params.append("q", search.value);
+//     }
 
-    if (filtre_priority.value !== "") {
-        params.append("priority", filtre_priority.value);
-    }
+//     if (filtre_priority.value !== "") {
+//         params.append("priority", filtre_priority.value);
+//     }
 
-    if (filtre_assignee.value !== "") {
-        params.append("assignee", filtre_assignee.value);
-    }
+//     if (filtre_assignee.value !== "") {
+//         params.append("assignee", filtre_assignee.value);
+//     }
 
-    getCards(params)
-        .then((donnees) => {
-            state.cards = donnees;
-            displayCards(state.cards);
-        })
-}
+//     getCards(params)
+//         .then((donnees) => {
+//             state.cards = donnees;
+//             displayCards(state.cards);
+//         })
+// }
 
-addCardBtn.addEventListener("click", () => {
-    cardToEdit = null;
-    changeModalTitle("Ajouter une nouvelle tâche");
-    openCardModal();
-});
-
-
-retryBtn.addEventListener("click", loadCards);
-
-search.addEventListener("input", Filters);
-filtre_priority.addEventListener("change", Filters);
-filtre_assignee.addEventListener("change", Filters);
-loadCards();
+// addCardBtn.addEventListener("click", () => {
+//     cardToEdit = null;
+//     changeModalTitle("Ajouter une nouvelle tâche");
+//     openCardModal();
+// });
 
 
-const creerCardBtn = document.querySelector("#terminé");
+// retryBtn.addEventListener("click", loadCards);
 
-addCardForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const card = readCardForm();
-
-    if (!validateCard(card)) {
-        Swal.fire({
-            icon: "error",
-            title: "Champs obligatoires",
-            text: "Veuillez remplir tous les champs !"
-        });
-        return;
-    }
-
-    if (cardToEdit) {
-        creerCardBtn.disabled = true;
-
-        try {
-            await updateCard(cardToEdit.id, card);
-            cardToEdit = null;
-            loadCards();
-
-            closeCardModal();
-            addCardForm.reset();
-
-        } finally {
-            creerCardBtn.disabled = false;
-        }
-    }
-    else {
-        state.cards.push(card);
-        displayCards(state.cards);
-
-        closeCardModal();
-        addCardForm.reset();
-    }
-
-});
-
-// Modification :
-
-document.addEventListener("click", (event) => {
-
-    if (event.target.className.includes("btn-modifier")) {
-
-        const id = event.target.dataset.id;
-
-        const carte = state.cards.find((carte) => {
-            return String(carte.id) === id;
-        });
-
-        cardToEdit = carte;
-        fillCardForm(cardToEdit);
-        changeModalTitle("Modifier une tâche");
-        openCardModal();
-
-        console.log(cardToEdit);
-    }
-
-});
+// search.addEventListener("input", Filters);
+// filtre_priority.addEventListener("change", Filters);
+// filtre_assignee.addEventListener("change", Filters);
+// loadCards();
 
 
-document.addEventListener("click", async (event) => {
-    if (event.target.className.includes("btn-deplacer")) {
+// const creerCardBtn = document.querySelector("#terminé");
 
-        const id = event.target.dataset.id;
-        const direction = event.target.dataset.direction;
-        const carte = state.cards.find((carte) => {
-            return String(carte.id) === id;
-        });
+// addCardForm.addEventListener("submit", async (event) => {
+//     event.preventDefault();
 
-        let nouveauStatut = carte.status;
+//     const card = readCardForm();
 
-        if (direction === "droite") {
-            if (carte.status === "todo") {
-                nouveauStatut = "in-progress";
-            }
-            else if (carte.status === "in-progress") {
-                nouveauStatut = "done";
-            }
-        }
-        else if (direction === "gauche") {
-            if (carte.status === "done") {
-                nouveauStatut = "in-progress";
-            }
-            else if (carte.status === "in-progress") {
-                nouveauStatut = "todo";
-            }
-        }
+//     if (!validateCard(card)) {
+//         Swal.fire({
+//             icon: "error",
+//             title: "Champs obligatoires",
+//             text: "Veuillez remplir tous les champs !"
+//         });
+//         return;
+//     }
 
-        try {
-            await Movecard(id, nouveauStatut);
-            loadCards();
+//     if (cardToEdit) {
+//         creerCardBtn.disabled = true;
 
-        } catch (error) {
+//         try {
+//             await updateCard(cardToEdit.id, card);
+//             cardToEdit = null;
+//             loadCards();
 
-            console.log("Erreur PATCH :", error);
-            console.log("Réponse API :", error.response?.data);
+//             closeCardModal();
+//             addCardForm.reset();
 
-            Swal.fire({
-                icon: "error",
-                title: "Erreur",
-                text: "Impossible de déplacer cette carte !"
-            });
-        }
+//         } finally {
+//             creerCardBtn.disabled = false;
+//         }
+//     }
+//     else {
+//         state.cards.push(card);
+//         displayCards(state.cards);
 
-        console.log("Nouveau statut :", nouveauStatut);
-        console.log("ID de la carte :", id);
-        console.log("Direction :", direction);
+//         closeCardModal();
+//         addCardForm.reset();
+//     }
 
-    }
-});
+// });
+
+// // Modification :
+
+// document.addEventListener("click", (event) => {
+
+//     if (event.target.className.includes("btn-modifier")) {
+
+//         const id = event.target.dataset.id;
+
+//         const carte = state.cards.find((carte) => {
+//             return String(carte.id) === id;
+//         });
+
+//         cardToEdit = carte;
+//         fillCardForm(cardToEdit);
+//         changeModalTitle("Modifier une tâche");
+//         openCardModal();
+
+//         console.log(cardToEdit);
+//     }
+
+// });
+
+
+// document.addEventListener("click", async (event) => {
+//     if (event.target.className.includes("btn-deplacer")) {
+
+//         const id = event.target.dataset.id;
+//         const direction = event.target.dataset.direction;
+//         const carte = state.cards.find((carte) => {
+//             return String(carte.id) === id;
+//         });
+
+//         let nouveauStatut = carte.status;
+
+//         if (direction === "droite") {
+//             if (carte.status === "todo") {
+//                 nouveauStatut = "in-progress";
+//             }
+//             else if (carte.status === "in-progress") {
+//                 nouveauStatut = "done";
+//             }
+//         }
+//         else if (direction === "gauche") {
+//             if (carte.status === "done") {
+//                 nouveauStatut = "in-progress";
+//             }
+//             else if (carte.status === "in-progress") {
+//                 nouveauStatut = "todo";
+//             }
+//         }
+
+//         try {
+//             await Movecard(id, nouveauStatut);
+//             loadCards();
+
+//         } catch (error) {
+
+//             console.log("Erreur PATCH :", error);
+//             console.log("Réponse API :", error.response?.data);
+
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Erreur",
+//                 text: "Impossible de déplacer cette carte !"
+//             });
+//         }
+
+//         console.log("Nouveau statut :", nouveauStatut);
+//         console.log("ID de la carte :", id);
+//         console.log("Direction :", direction);
+
+//     }
+// });
